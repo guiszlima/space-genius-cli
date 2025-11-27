@@ -2,6 +2,9 @@
 # Only the database file should be ignored so other files remain tracked
 db.sqlite
 
+# Ignore VS Code workspace settings
+.vscode/
+
 # Optional: ignore common editor/temp files (uncomment if you use them)
 # .DS_Store
 # *.swp
