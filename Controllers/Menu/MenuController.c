@@ -16,7 +16,7 @@
 #include "../UserAdmin/UserAdminController.h"
 #include <sqlite3.h>
 
-// Callback para obter o campo admin da consulta
+
 static int admin_check_callback(void *data, int argc, char **argv, char **azColName)
 {
     int *is_admin = (int *)data;
@@ -27,7 +27,7 @@ static int admin_check_callback(void *data, int argc, char **argv, char **azColN
     return 0;
 }
 
-// Protótipos de funções de placeholder para as novas opções
+
 void show_admin_menu();
 
 static int is_user_admin(int user_id)
@@ -65,7 +65,7 @@ void show_main_menu(void)
         printf("4. ⭐ Minhas Avaliações\n");
         printf("5. 🕹 Loja de Jogos\n");
         printf("6. 💰 Saldo / Transações\n");
-        // mostra opção admin somente se a query confirmar admin = 1
+        
         if (is_user_admin(user->id))
         {
             printf("7. 🛠️ Menu Admin\n");

@@ -6,23 +6,23 @@
 #include <string.h>
 #include <sqlite3.h>
 
-// Protótipos
+
 void add_category();
 void list_categories();
 void edit_category();
 void delete_category();
 
-// Struct para guardar os dados de uma categoria
+
 typedef struct
 {
     int id;
     char nome[101];
 } Categoria;
 
-// Callback para a listagem de categorias
+
 static int list_categories_callback(void *data, int argc, char **argv, char **azColName)
 {
-    // Imprime o cabeçalho uma única vez
+    
     static int header_printed = 0;
     if (!header_printed)
     {
@@ -112,14 +112,14 @@ void list_categories()
     printf("\n--- LISTA DE CATEGORIAS ---\n");
     const char *sql = "SELECT id, nome FROM categorias ORDER BY nome;";
 
-    // Reseta o flag do cabeçalho antes de chamar a query
-    // (Gambiarra: um ponteiro para um int seria uma solução melhor)
+    
+    
     int (*callback)(void *, int, char **, char **) = list_categories_callback;
-    // Acessando o ponteiro da função para resetar o estado
-    // Esta é uma abordagem perigosa e não recomendada para produção.
-    // Seria melhor passar um struct de contexto para o callback.
-    // Por simplicidade, vamos apenas re-imprimir o cabeçalho sempre.
-    // A solução com static int header_printed não funciona bem aqui.
+    
+    
+    
+    
+    
 
     printf("%-5s %-20s\n", "ID", "Nome");
     printf("-------------------\n");
@@ -133,7 +133,7 @@ void edit_category()
     char new_name[101];
 
     printf("\n--- EDITAR CATEGORIA ---\n");
-    list_categories(); // Mostra as categorias para o usuário saber qual ID editar
+    list_categories(); 
 
     printf("Digite o ID da categoria que deseja editar: ");
     char id_buffer[10];

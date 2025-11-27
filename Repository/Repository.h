@@ -3,8 +3,8 @@
 
 #include <sqlite3.h>
 
-// Tipo de função de callback para consultas que retornam múltiplos resultados.
-// Esta função será chamada para cada linha do resultado.
+
+
 typedef int (*query_callback)(void *data, int argc, char **argv, char **azColName);
 
 /**
@@ -26,4 +26,4 @@ int execute_non_query(const char *sql);
  */
 int execute_query(const char *sql, query_callback callback, void *data);
 
-#endif // REPOSITORY_H
+#endif 

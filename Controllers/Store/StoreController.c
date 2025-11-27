@@ -1,8 +1,8 @@
 #include "StoreController.h"
 #include "../../Utils/Input.h"
-#include "../Game/GameController.h"            // Para listar jogos
-#include "../Cart/CartController.h"            // Para adicionar ao carrinho
-#include "../../Wishlist/WishlistController.h" // Para adicionar à lista de desejos
+#include "../Game/GameController.h"            
+#include "../Cart/CartController.h"            
+#include "../../Wishlist/WishlistController.h" 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,7 +14,7 @@ void show_store_menu()
     while (option != 0)
     {
         printf("\n--- LOJA DE JOGOS ---\n");
-        extern void list_games(); // Reutiliza a função de listagem de jogos
+        extern void list_games(); 
         list_games();
         printf("-----------------------\n");
         printf("1. Adicionar Jogo ao Carrinho\n");
@@ -27,10 +27,10 @@ void show_store_menu()
         switch (option)
         {
         case 1:
-            add_to_cart(); // Reutiliza a função do CartController
+            add_to_cart(); 
             break;
         case 2:
-            add_to_wishlist(); // Reutiliza a função do WishlistController
+            add_to_wishlist(); 
             break;
         case 0:
             printf("Voltando ao menu principal...\n");

@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <sqlite3.h>
 
-// Struct para guardar os itens do carrinho para a transação
+
 typedef struct CartItem
 {
     int jogo_id;
@@ -14,7 +14,7 @@ typedef struct CartItem
     struct CartItem *next;
 } CartItem;
 
-// Callback para buscar os itens do carrinho
+
 static int get_cart_items_callback(void *data, int argc, char **argv, char **azColName)
 {
     CartItem **head = (CartItem **)data;
@@ -22,10 +22,10 @@ static int get_cart_items_callback(void *data, int argc, char **argv, char **azC
     if (!new_item)
     {
         fprintf(stderr, "Falha ao alocar memória para item do carrinho.\n");
-        return 1; // Para a execução
+        return 1; 
     }
 
-    // argv[0]: jogo_id, argv[1]: quantidade, argv[2]: preco
+    
     new_item->jogo_id = atoi(argv[0]);
     new_item->quantidade = atoi(argv[1]);
     new_item->preco = atof(argv[2]);
@@ -44,7 +44,7 @@ void finalize_purchase()
         return;
     }
 
-    // 1. Buscar todos os itens do carrinho
+    
     CartItem *items_head = NULL;
     char *sql = sqlite3_mprintf(
         "SELECT ci.jogo_id, ci.quantidade, j.preco FROM carrinho_itens ci "
@@ -61,7 +61,7 @@ void finalize_purchase()
         return;
     }
 
-    // 2. Calcular o total e verificar o saldo
+    
     double total_price = 0;
     for (CartItem *item = items_head; item != NULL; item = item->next)
     {
@@ -71,7 +71,7 @@ void finalize_purchase()
     if (user->saldo < total_price)
     {
         printf("Saldo insuficiente! Saldo atual: R$%.2f, Total da compra: R$%.2f\n", user->saldo, total_price);
-        // Limpar a lista de itens
+        
         while (items_head != NULL)
         {
             CartItem *temp = items_head;
@@ -81,11 +81,11 @@ void finalize_purchase()
         return;
     }
 
-    // 3. Iniciar transação no banco de dados
+    
     printf("Iniciando a transação...\n");
     execute_non_query("BEGIN TRANSACTION;");
 
-    // 4. Descontar o saldo do usuário
+    
     double new_saldo = user->saldo - total_price;
     sql = sqlite3_mprintf("UPDATE usuarios SET saldo = %.2f WHERE id = %d;", new_saldo, user->id);
     if (execute_non_query(sql) <= 0)
@@ -97,7 +97,7 @@ void finalize_purchase()
     }
     sqlite3_free(sql);
 
-    // 5. Registrar cada compra na tabela de transações
+    
     for (CartItem *item = items_head; item != NULL; item = item->next)
     {
         sql = sqlite3_mprintf(
@@ -113,7 +113,7 @@ void finalize_purchase()
         sqlite3_free(sql);
     }
 
-    // 6. Limpar o carrinho
+    
     sql = sqlite3_mprintf("DELETE FROM carrinho_itens WHERE carrinho_id IN (SELECT id FROM carrinhos WHERE usuario_id = %d);", user->id);
     if (execute_non_query(sql) < 0)
     {
@@ -124,11 +124,11 @@ void finalize_purchase()
     }
     sqlite3_free(sql);
 
-    // 7. Commit da transação
+    
     if (execute_non_query("COMMIT;") >= 0)
     {
         printf("Compra finalizada com sucesso!\n");
-        // Atualiza o saldo do usuário em memória
+        
         user->saldo = new_saldo;
     }
     else
@@ -137,7 +137,7 @@ void finalize_purchase()
         execute_non_query("ROLLBACK;");
     }
 
-    // Limpar a lista de itens da memória
+    
     while (items_head != NULL)
     {
         CartItem *temp = items_head;
@@ -146,10 +146,10 @@ void finalize_purchase()
     }
 }
 
-// Callback para listar as transações
+
 static int list_transactions_callback(void *data, int argc, char **argv, char **azColName)
 {
-    // argv[0]: id, argv[1]: jogo_nome, argv[2]: tipo, argv[3]: valor, argv[4]: data
+    
     printf("%-5s | %-30s | %-10s | R$ %-10s | %-20s\n",
            argv[0], argv[1], argv[2], argv[3], argv[4]);
     return 0;

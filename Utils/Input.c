@@ -24,5 +24,5 @@ int get_menu_option(const char *prompt)
             return option;
         }
     }
-    return -1; // Invalid option
+    return -1; 
 }

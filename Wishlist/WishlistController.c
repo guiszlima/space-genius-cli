@@ -6,15 +6,15 @@
 #include <stdlib.h>
 #include <sqlite3.h>
 
-// Protótipos
+
 void add_to_wishlist();
 void list_wishlist_items();
 void remove_from_wishlist();
 
-// Callback para listar itens da lista de desejos
+
 static int list_wishlist_callback(void *data, int argc, char **argv, char **azColName)
 {
-    // argv[0]: id, argv[1]: jogo_nome, argv[2]: adicionado_em
+    
     printf("%-5s | %-30s | %-20s\n",
            argv[0], argv[1], argv[2]);
     return 0;
@@ -27,7 +27,7 @@ void show_wishlist_menu()
     while (option != 0)
     {
         printf("\n--- SUA LISTA DE DESEJOS ---\n");
-        list_wishlist_items(); // Sempre lista os itens ao entrar no menu
+        list_wishlist_items(); 
         printf("------------------------------\n");
         printf("1. Adicionar Jogo à Lista de Desejos\n");
         printf("2. Remover Jogo da Lista de Desejos\n");
@@ -139,7 +139,7 @@ void remove_from_wishlist()
     char wishlist_item_id_buffer[10];
     int wishlist_item_id;
 
-    list_wishlist_items(); // Mostra os itens para o usuário escolher qual remover
+    list_wishlist_items(); 
 
     get_input("Digite o ID do item da lista de desejos para remover: ", wishlist_item_id_buffer, sizeof(wishlist_item_id_buffer));
     if (sscanf(wishlist_item_id_buffer, "%d", &wishlist_item_id) != 1)

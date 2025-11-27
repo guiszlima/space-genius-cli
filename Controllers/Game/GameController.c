@@ -1,13 +1,13 @@
 #include "GameController.h"
 #include "../../Utils/Input.h"
 #include "../../Repository/Repository.h"
-#include "../Category/CategoryController.h" // Para poder listar as categorias
+#include "../Category/CategoryController.h" 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sqlite3.h>
 
-// Protótipos
+
 void create_game();
 void list_games();
 void edit_game();
@@ -66,12 +66,12 @@ void create_game()
 
     printf("\n--- ADICIONAR NOVO JOGO ---\n");
 
-    // Listar categorias para ajudar o usuário
-    // A função list_categories de CategoryController não é ideal aqui,
-    // pois ela é feita para um menu. O ideal seria ter uma função que só lista.
-    // Por simplicidade, vamos chamar a função existente.
+    
+    
+    
+    
     printf("Categorias disponíveis:\n");
-    list_categories(); // Em um projeto real, isso seria refatorado.
+    list_categories(); 
 
     char cat_id_buffer[10];
     get_input("Digite o ID da categoria: ", cat_id_buffer, sizeof(cat_id_buffer));
@@ -122,10 +122,10 @@ void create_game()
     sqlite3_free(sql);
 }
 
-// Callback para a listagem de jogos
+
 static int list_games_callback(void *data, int argc, char **argv, char **azColName)
 {
-    // argv[0] = jogo.id, argv[1] = jogo.nome, argv[2] = categoria.nome, argv[3] = preco, argv[4] = disponivel
+    
     printf("%-5s | %-30s | %-20s | R$ %-10s | %-12s\n",
            argv[0], argv[1], argv[2], argv[3], atoi(argv[4]) ? "Sim" : "Não");
     return 0;
@@ -179,7 +179,7 @@ void list_games()
     sqlite3_free(sql);
 }
 
-// Struct e callback para buscar os dados de um jogo para edição
+
 typedef struct
 {
     char name[151];
@@ -218,7 +218,7 @@ void edit_game()
         return;
     }
 
-    // 1. Buscar dados atuais do jogo
+    
     char *sql = sqlite3_mprintf("SELECT nome, descricao, preco, disponivel, categoria_id FROM jogos WHERE id = %d;", game_id);
     execute_query(sql, edit_game_callback, &game);
     sqlite3_free(sql);
@@ -229,7 +229,7 @@ void edit_game()
         return;
     }
 
-    // 2. Pedir novos dados ao usuário
+    
     char name[151], description[501], price_str[20], cat_id_buffer[10], available_buffer[10];
 
     printf("Editando o jogo '%s'. Deixe em branco para não alterar.\n", game.name);
@@ -256,7 +256,7 @@ void edit_game()
     get_input("", available_buffer, sizeof(available_buffer));
     int new_available = (strlen(available_buffer) > 0) ? atoi(available_buffer) : game.available;
 
-    // 3. Montar e executar o UPDATE
+    
     sql = sqlite3_mprintf(
         "UPDATE jogos SET nome = '%q', descricao = '%q', preco = %f, categoria_id = %d, disponivel = %d WHERE id = %d;",
         name, description, new_price, new_category_id, new_available, game_id);
@@ -294,7 +294,7 @@ void delete_game()
         return;
     }
 
-    // Antes de deletar, seria bom confirmar com o usuário.
+    
     char confirm[10];
     printf("Tem certeza que deseja deletar o jogo com ID %d? (s/n): ", game_id);
     get_input("", confirm, sizeof(confirm));
@@ -318,7 +318,7 @@ void delete_game()
     }
     else
     {
-        // A falha pode ocorrer por causa de foreign keys em outras tabelas (transacoes, etc)
+        
         printf("Erro ao deletar jogo. Verifique se o ID existe e se o jogo não está em transações, carrinhos, etc.\n");
     }
 
@@ -365,10 +365,10 @@ void manage_related_games()
     }
 }
 
-// Callback para listar jogos relacionados
+
 static int list_related_callback(void *data, int argc, char **argv, char **azColName)
 {
-    // argv[0] = related_game.id, argv[1] = related_game.nome
+    
     printf(" -> ID: %s, Nome: %s\n", argv[0], argv[1]);
     return 0;
 }
@@ -433,7 +433,7 @@ void add_related_game()
         return;
     }
 
-    // Inserir a relação nos dois sentidos para ser bidirecional
+    
     char *sql1 = sqlite3_mprintf("INSERT INTO jogos_relacionados (jogo_id, relacionado_id) VALUES (%d, %d);", game_id, related_id);
     char *sql2 = sqlite3_mprintf("INSERT INTO jogos_relacionados (jogo_id, relacionado_id) VALUES (%d, %d);", related_id, game_id);
 
@@ -475,7 +475,7 @@ void remove_related_game()
         return;
     }
 
-    // Listar os jogos relacionados a este para facilitar
+    
     list_related_games();
 
     get_input("Digite o ID do jogo relacionado que deseja remover: ", id_buffer2, sizeof(id_buffer2));
@@ -485,7 +485,7 @@ void remove_related_game()
         return;
     }
 
-    // Remover a relação nos dois sentidos
+    
     char *sql1 = sqlite3_mprintf("DELETE FROM jogos_relacionados WHERE jogo_id = %d AND relacionado_id = %d;", game_id, related_id);
     char *sql2 = sqlite3_mprintf("DELETE FROM jogos_relacionados WHERE jogo_id = %d AND relacionado_id = %d;", related_id, game_id);
 

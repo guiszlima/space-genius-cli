@@ -9,18 +9,18 @@
 #include "../../Database/Database.h"
 #include <sqlite3.h>
 
-// Protótipos
+
 void add_to_cart();
 void list_cart_items();
 void remove_from_cart();
 void clear_cart();
 
-// Callback para listar itens do carrinho
+
 static int list_cart_callback(void *data, int argc, char **argv, char **azColName)
 {
-    // data: ponteiro para o total
+    
     double *total = (double *)data;
-    // argv[0]: item_id, argv[1]: jogo_nome, argv[2]: quantidade, argv[3]: preco_unitario
+    
     int quantidade = atoi(argv[2]);
     double preco = atof(argv[3]);
     double subtotal = quantidade * preco;
@@ -39,7 +39,7 @@ void show_cart_menu()
     while (option != 0)
     {
         printf("\n--- SEU CARRINHO DE COMPRAS ---\n");
-        list_cart_items(); // Sempre lista os itens ao entrar no menu
+        list_cart_items(); 
         printf("---------------------------------\n");
         printf("1. Adicionar Jogo ao Carrinho\n");
         printf("2. Remover Jogo do Carrinho\n");
@@ -110,11 +110,11 @@ void list_cart_items()
     sqlite3_free(sql);
 }
 
-// Callback para pegar o ID do carrinho e o ID de um item existente
+
 static int get_cart_info_callback(void *data, int argc, char **argv, char **azColName)
 {
     int *results = (int *)data;
-    // results[0] = cart_id, results[1] = item_id
+    
     if (strcmp(azColName[0], "carrinho_id") == 0)
     {
         results[0] = atoi(argv[0]);
@@ -132,8 +132,8 @@ void add_to_cart()
     if (!user)
         return;
 
-    // Reutilizar a função de listar jogos do GameController
-    // Em um projeto real, a função de listar jogos seria mais genérica
+    
+    
     extern void list_games();
     list_games();
 
@@ -154,8 +154,8 @@ void add_to_cart()
         return;
     }
 
-    // 1. Obter o ID do carrinho do usuário
-    int cart_info[2] = {-1, -1}; // cart_id, item_id
+    
+    int cart_info[2] = {-1, -1}; 
     char *sql = sqlite3_mprintf("SELECT id AS carrinho_id FROM carrinhos WHERE usuario_id = %d;", user->id);
     execute_query(sql, get_cart_info_callback, cart_info);
     sqlite3_free(sql);
@@ -167,9 +167,9 @@ void add_to_cart()
     }
     int cart_id = cart_info[0];
 
-    // 2. Verificar se o item já existe no carrinho
+    
     sql = sqlite3_mprintf("SELECT id AS item_id FROM carrinho_itens WHERE carrinho_id = %d AND jogo_id = %d;", cart_id, game_id);
-    cart_info[1] = -1; // Reset item_id
+    cart_info[1] = -1; 
     execute_query(sql, get_cart_info_callback, cart_info);
     sqlite3_free(sql);
 
@@ -177,12 +177,12 @@ void add_to_cart()
 
     if (item_id != -1)
     {
-        // Item existe, então UPDATE
+        
         sql = sqlite3_mprintf("UPDATE carrinho_itens SET quantidade = quantidade + %d WHERE id = %d;", quantity, item_id);
     }
     else
     {
-        // Item não existe, então INSERT
+        
         sql = sqlite3_mprintf("INSERT INTO carrinho_itens (carrinho_id, jogo_id, quantidade) VALUES (%d, %d, %d);", cart_id, game_id, quantity);
     }
 
@@ -213,7 +213,7 @@ void remove_from_cart()
     char item_id_buffer[10];
     int item_id;
 
-    // A lista de itens já é mostrada no menu principal do carrinho
+    
     get_input("Digite o ID do item do carrinho para remover: ", item_id_buffer, sizeof(item_id_buffer));
     if (sscanf(item_id_buffer, "%d", &item_id) != 1)
     {
@@ -221,7 +221,7 @@ void remove_from_cart()
         return;
     }
 
-    // Precisamos garantir que o item pertence ao carrinho do usuário logado para segurança
+    
     char *sql = sqlite3_mprintf(
         "DELETE FROM carrinho_itens WHERE id = %d AND carrinho_id IN (SELECT id FROM carrinhos WHERE usuario_id = %d);",
         item_id, user->id);
@@ -234,7 +234,7 @@ void remove_from_cart()
 
     if (execute_non_query(sql) == 0)
     {
-        // Checar se alguma linha foi afetada
+        
         int changes = sqlite3_changes(get_db_connection());
         if (changes > 0)
         {
@@ -269,7 +269,7 @@ void clear_cart()
         return;
     }
 
-    // A subquery garante que estamos limpando o carrinho do usuário correto.
+    
     char *sql = sqlite3_mprintf(
         "DELETE FROM carrinho_itens WHERE carrinho_id IN (SELECT id FROM carrinhos WHERE usuario_id = %d);",
         user->id);

@@ -1,7 +1,7 @@
 #include "UserController.h"
 #include "../../Repository/Repository.h"
 #include "../Auth/Auth.h"
-#include "../../Utils/Input.h" // Incluindo o novo utilitário de input
+#include "../../Utils/Input.h" 
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -16,7 +16,7 @@ void register_user_flow()
 
     printf("\n--- CADASTRO DE NOVO USUÁRIO ---\n");
 
-    // Primeiro: verificar se tabela está vazia
+    
     int tabela_vazia = 0;
     int row_count = 0;
 
@@ -31,19 +31,19 @@ void register_user_flow()
         printf("\n-- PRIMEIRO REGISTRO: ADICIONAR USUÁRIO ADMINISTRADOR --\n\n");
     }
 
-    // Coleta de dados
+    
     get_input("Digite o nome de usuário: ", username, sizeof(username));
     get_input("Digite o e-mail: ", email, sizeof(email));
     get_input("Digite a senha: ", password, sizeof(password));
 
-    // Validação simples
+    
     if (strlen(username) == 0 || strlen(email) == 0 || strlen(password) == 0)
     {
         printf("Todos os campos são obrigatórios!\n");
         return;
     }
 
-    // Monta o SQL com admin = 1 se tabela vazia, senão admin = 0
+    
     char *sql = sqlite3_mprintf(
         "INSERT INTO usuarios (username, email, senha, admin) VALUES ('%q', '%q', '%q', %d);",
         username, email, password,
@@ -70,7 +70,7 @@ void register_user_flow()
     sqlite3_free(sql);
 }
 
-// Struct para guardar os dados da tentativa de login
+
 typedef struct
 {
     int id;
@@ -86,7 +86,7 @@ int count_rows_callback(void *data, int argc, char **argv, char **colNames)
     return 0;
 }
 
-// Callback para processar o resultado da consulta de login
+
 static int login_callback(void *data, int argc, char **argv, char **azColName)
 {
     LoginData *login_attempt = (LoginData *)data;
@@ -110,7 +110,7 @@ static int login_callback(void *data, int argc, char **argv, char **azColName)
     return 0;
 }
 
-// Callback para verificar a existência de um carrinho
+
 static int cart_exists_callback(void *data, int argc, char **argv, char **azColName)
 {
     int *found = (int *)data;
@@ -141,11 +141,11 @@ void login_user_flow()
 
     if (login_attempt.found)
     {
-        // Define o usuário logado globalmente
+        
         auth_set_usuario_logado(login_attempt.id, login_attempt.username, login_attempt.saldo);
         printf("Login realizado com sucesso! Bem-vindo, %s!\n", login_attempt.username);
 
-        // Insere no histórico de login
+        
         char *ip = "127.0.0.1";
         char *agent = "CLI-App/1.0";
         sql = sqlite3_mprintf("INSERT INTO login_historico (usuario_id, ip, agente_usuario) VALUES (%d, '%q', '%q');", login_attempt.id, ip, agent);
@@ -156,7 +156,7 @@ void login_user_flow()
             sqlite3_free(sql);
         }
 
-        // Verifica e cria o carrinho se não existir
+        
         int cart_found = 0;
         sql = sqlite3_mprintf("SELECT id FROM carrinhos WHERE usuario_id = %d;", login_attempt.id);
         execute_query(sql, cart_exists_callback, &cart_found);

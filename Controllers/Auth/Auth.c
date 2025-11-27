@@ -3,8 +3,8 @@
 #include <string.h>
 #include <stdio.h>
 
-// Ponteiro global para o usuário logado.
-// 'static' para restringir o acesso a este arquivo.
+
+
 static UsuarioLogado *g_usuario_logado = NULL;
 
 /**
@@ -17,7 +17,7 @@ static UsuarioLogado *g_usuario_logado = NULL;
  */
 void auth_set_usuario_logado(int id, const char *username, double saldo)
 {
-    // Se já existir um usuário, limpa a memória primeiro
+    
     if (g_usuario_logado != NULL)
     {
         free(g_usuario_logado);
@@ -32,7 +32,7 @@ void auth_set_usuario_logado(int id, const char *username, double saldo)
 
     g_usuario_logado->id = id;
     strncpy(g_usuario_logado->username, username, sizeof(g_usuario_logado->username) - 1);
-    g_usuario_logado->username[sizeof(g_usuario_logado->username) - 1] = '\0'; // Garante terminação nula
+    g_usuario_logado->username[sizeof(g_usuario_logado->username) - 1] = '\0'; 
     g_usuario_logado->saldo = saldo;
 }
 

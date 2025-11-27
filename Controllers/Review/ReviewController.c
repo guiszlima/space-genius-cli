@@ -7,7 +7,7 @@
 #include <string.h>
 #include <sqlite3.h>
 
-// Protótipos
+
 void rate_game();
 void list_reviews_by_game();
 void edit_my_review();
@@ -62,8 +62,8 @@ void rate_game()
         return;
     }
 
-    // Para o usuário saber qual jogo avaliar, idealmente listaríamos os jogos que ele comprou.
-    // Por simplicidade, vamos listar todos os jogos.
+    
+    
     extern void list_games();
     list_games();
 
@@ -86,8 +86,8 @@ void rate_game()
 
     get_input("Deixe um comentário (opcional): ", comment, sizeof(comment));
 
-    // O ideal seria verificar se o usuário já avaliou este jogo e, em caso afirmativo,
-    // oferecer a opção de editar. Por enquanto, vamos permitir múltiplas avaliações.
+    
+    
     char *sql = sqlite3_mprintf(
         "INSERT INTO avaliacoes (usuario_id, jogo_id, nota, comentario) VALUES (%d, %d, %d, '%q');",
         user->id, game_id, rating, comment);
@@ -110,10 +110,10 @@ void rate_game()
     sqlite3_free(sql);
 }
 
-// Callback para listar avaliações
+
 static int list_reviews_callback(void *data, int argc, char **argv, char **azColName)
 {
-    // argv[0]: id, argv[1]: username, argv[2]: nota, argv[3]: comentario, argv[4]: criado_em
+    
     printf("%-5s | %-20s | %-5s | %-40s | %-20s\n",
            argv[0], argv[1], argv[2], argv[3], argv[4]);
     return 0;
@@ -156,10 +156,10 @@ void list_reviews_by_game()
     sqlite3_free(sql);
 }
 
-// Callback para listar as avaliações do usuário logado
+
 static int list_my_reviews_callback(void *data, int argc, char **argv, char **azColName)
 {
-    // argv[0]: id, argv[1]: jogo_nome, argv[2]: nota, argv[3]: comentario, argv[4]: criado_em
+    
     printf("%-5s | %-30s | %-5s | %-40s | %-20s\n",
            argv[0], argv[1], argv[2], argv[3], argv[4]);
     return 0;

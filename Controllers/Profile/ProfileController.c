@@ -7,11 +7,11 @@
 #include <string.h>
 #include <sqlite3.h>
 
-// Protótipos para as funções de edição
+
 void editar_email();
 void alterar_senha();
 void ver_jogos_comprados();
-// Função para exibir as informações do perfil do usuário
+
 void view_my_profile()
 {
     UsuarioLogado *user = auth_get_usuario_logado();
@@ -21,7 +21,7 @@ void view_my_profile()
         return;
     }
 
-    // Em um caso real, buscaríamos o email do banco, pois não está no struct Auth.
+    
     printf("\n--- SEU PERFIL ---\n");
     printf("ID: %d\n", user->id);
     printf("Username: %s\n", user->username);
@@ -35,7 +35,7 @@ void show_profile_menu()
 
     while (option != 0)
     {
-        view_my_profile(); // Mostra o perfil atual
+        view_my_profile(); 
         printf("\n--- MENU DO PERFIL ---\n");
         printf("1. Editar E-mail\n");
         printf("2. Alterar Senha\n");
@@ -66,7 +66,7 @@ void show_profile_menu()
     }
 }
 
-// Placeholders para as funções de edição
+
 void editar_email()
 {
     UsuarioLogado *user = auth_get_usuario_logado();

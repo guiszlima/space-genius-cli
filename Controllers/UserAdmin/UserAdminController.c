@@ -6,16 +6,16 @@
 #include <string.h>
 #include <sqlite3.h>
 
-// Protótipos
+
 void list_users();
 void edit_user_balance();
 void delete_user();
 void edit_user_admin();
 
-// Callback para listar usuários
+
 static int list_users_callback(void *data, int argc, char **argv, char **azColName)
 {
-    // argv[0]: id, argv[1]: username, argv[2]: email, argv[3]: saldo, argv[4]: admin, argv[5]: criado_em
+    
     const char *id = (argc > 0 && argv[0]) ? argv[0] : "NULL";
     const char *username = (argc > 1 && argv[1]) ? argv[1] : "";
     const char *email = (argc > 2 && argv[2]) ? argv[2] : "";

@@ -19,10 +19,10 @@ int execute_non_query(const char *sql)
     {
         fprintf(stderr, "Erro no SQL (non-query): %s\n", err_msg);
         sqlite3_free(err_msg);
-        return -1; // Falha
+        return -1; 
     }
 
-    return sqlite3_changes(db); // Sucesso, retorna o número de linhas afetadas
+    return sqlite3_changes(db); 
 }
 
 /**
@@ -44,8 +44,8 @@ int execute_query(const char *sql, query_callback callback, void *data)
     {
         fprintf(stderr, "Erro no SQL (query): %s\n", err_msg);
         sqlite3_free(err_msg);
-        return 1; // Falha
+        return 1; 
     }
 
-    return 0; // Sucesso
+    return 0; 
 }

@@ -84,7 +84,7 @@ void add_money()
 
     if (execute_non_query(sql) > 0)
     {
-        user->saldo += amount; // Atualiza o saldo em memória
+        user->saldo += amount; 
         printf("R$%.2f adicionado à sua conta. Novo saldo: R$%.2f\n", amount, user->saldo);
     }
     else
