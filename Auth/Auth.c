@@ -13,6 +13,7 @@ static UsuarioLogado *g_usuario_logado = NULL;
  * @param id O ID do usuário.
  * @param username O nome de usuário.
  * @param saldo O saldo do usuário.
+
  */
 void auth_set_usuario_logado(int id, const char *username, double saldo)
 {

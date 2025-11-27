@@ -11,6 +11,7 @@ void run_migrations(void)
         "senha TEXT NOT NULL,"
         "email TEXT NOT NULL UNIQUE,"
         "saldo NUMERIC NOT NULL DEFAULT 0,"
+        "admin INTEGER NOT NULL DEFAULT 0,"
         "criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,"
         "atualizado_em DATETIME"
         ");"
@@ -94,16 +95,7 @@ void run_migrations(void)
         "UNIQUE(usuario_id, jogo_id),"
         "FOREIGN KEY(usuario_id) REFERENCES usuarios(id),"
         "FOREIGN KEY(jogo_id) REFERENCES jogos(id)"
-        ");"
-
-        "CREATE TABLE IF NOT EXISTS logs_admin ("
-        "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-        "admin TEXT NOT NULL,"
-        "acao TEXT NOT NULL,"
-        "alvo TEXT,"
-        "criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP"
         ");";
-
     if (execute_non_query(sql) >= 0)
     {
         printf("Banco de dados migrado com sucesso!\n");

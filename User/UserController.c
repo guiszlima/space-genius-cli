@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <sqlite3.h>
 
+int count_rows_callback(void *data, int argc, char **argv, char **colNames);
 void register_user_flow()
 {
     char username[101];
@@ -14,6 +15,21 @@ void register_user_flow()
     char password[101];
 
     printf("\n--- CADASTRO DE NOVO USUÁRIO ---\n");
+
+    // Primeiro: verificar se tabela está vazia
+    int tabela_vazia = 0;
+    int row_count = 0;
+
+    char *sql_check = sqlite3_mprintf("SELECT 1 FROM usuarios LIMIT 1;");
+
+    execute_query(sql_check, count_rows_callback, &row_count);
+    sqlite3_free(sql_check);
+
+    if (row_count == 0)
+    {
+        tabela_vazia = 1;
+        printf("\n-- PRIMEIRO REGISTRO: ADICIONAR USUÁRIO ADMINISTRADOR --\n\n");
+    }
 
     // Coleta de dados
     get_input("Digite o nome de usuário: ", username, sizeof(username));
@@ -27,8 +43,11 @@ void register_user_flow()
         return;
     }
 
-    // Monta o SQL de forma segura
-    char *sql = sqlite3_mprintf("INSERT INTO usuarios (username, email, senha) VALUES ('%q', '%q', '%q');", username, email, password);
+    // Monta o SQL com admin = 1 se tabela vazia, senão admin = 0
+    char *sql = sqlite3_mprintf(
+        "INSERT INTO usuarios (username, email, senha, admin) VALUES ('%q', '%q', '%q', %d);",
+        username, email, password,
+        tabela_vazia ? 1 : 0);
 
     if (!sql)
     {
@@ -38,7 +57,10 @@ void register_user_flow()
 
     if (execute_non_query(sql) > 0)
     {
-        printf("Usuário '%s' cadastrado com sucesso!\n", username);
+        if (tabela_vazia)
+            printf("Administrador '%s' cadastrado com sucesso!\n", username);
+        else
+            printf("Usuário '%s' cadastrado com sucesso!\n", username);
     }
     else
     {
@@ -56,6 +78,13 @@ typedef struct
     double saldo;
     int found;
 } LoginData;
+
+int count_rows_callback(void *data, int argc, char **argv, char **colNames)
+{
+    int *count = (int *)data;
+    (*count)++;
+    return 0;
+}
 
 // Callback para processar o resultado da consulta de login
 static int login_callback(void *data, int argc, char **argv, char **azColName)

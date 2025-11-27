@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "../Repository/Repository.h"
 #include "MenuController.h"
 #include "../User/UserController.h"
 #include "../Auth/Auth.h"
@@ -11,12 +12,35 @@
 #include "../Balance/BalanceController.h"
 #include "../Review/ReviewController.h"
 #include "../Wishlist/WishlistController.h"
-#include "../Log/LogController.h"
 #include "../Store/StoreController.h"
 #include "../UserAdmin/UserAdminController.h"
+#include <sqlite3.h>
+
+// Callback para obter o campo admin da consulta
+static int admin_check_callback(void *data, int argc, char **argv, char **azColName)
+{
+    int *is_admin = (int *)data;
+    if (argc > 0 && argv[0])
+    {
+        *is_admin = atoi(argv[0]);
+    }
+    return 0;
+}
 
 // Protótipos de funções de placeholder para as novas opções
 void show_admin_menu();
+
+static int is_user_admin(int user_id)
+{
+    int is_admin = 0;
+    char *sql = sqlite3_mprintf("SELECT admin FROM usuarios WHERE id = %d LIMIT 1;", user_id);
+    if (!sql)
+        return 0;
+
+    execute_query(sql, admin_check_callback, &is_admin);
+    sqlite3_free(sql);
+    return is_admin == 1;
+}
 
 void show_main_menu(void)
 {
@@ -41,9 +65,13 @@ void show_main_menu(void)
         printf("4. ⭐ Minhas Avaliações\n");
         printf("5. 🕹 Loja de Jogos\n");
         printf("6. 💰 Saldo / Transações\n");
-        printf("8. 🛠️ Menu Admin\n");
-        printf("9. 🚪 Logout\n");
+        // mostra opção admin somente se a query confirmar admin = 1
+        if (is_user_admin(user->id))
+        {
+            printf("7. 🛠️ Menu Admin\n");
         }
+        printf("0. 🚪 Logout\n");
+    }
 
     printf("==========================\n");
 
@@ -89,10 +117,18 @@ void show_main_menu(void)
         case 6:
             show_balance_menu();
             break;
-        case 8:
+        case 7:
+        {
+            UsuarioLogado *user = auth_get_usuario_logado();
+            if (!is_user_admin(user->id))
+            {
+                printf("Opção Inválida.\n");
+                break;
+            }
             show_admin_menu();
             break;
-        case 9:
+        }
+        case 0:
             auth_logout();
             break;
 
@@ -112,7 +148,7 @@ void show_admin_menu()
         printf("1. Gerenciar Categorias\n");
         printf("2. Gerenciar Jogos\n");
         printf("3. Gerenciar Usuários\n");
-        printf("4. Ver Logs Admin\n");
+
         printf("0. Voltar\n");
         printf("---------------------------\n");
         option = get_menu_option("Escolha uma opção: ");
@@ -127,9 +163,7 @@ void show_admin_menu()
         case 3:
             show_user_admin_menu();
             break;
-        case 4:
-            show_log_menu();
-            break;
+
         case 0:
             break;
         default:
