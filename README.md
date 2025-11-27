@@ -27,10 +27,3 @@ gcc -I. $(find . -name '*.c') -o app -lsqlite3
 ```bash
 ./app
 ```
-
-Observações importantes
-
-- O arquivo do banco local é `db.sqlite` e está listado em `.gitignore` para não ser enviado ao repositório.
-- Migrações: a aplicação contém um módulo de migração (`Migrate`) que cria as tabelas necessárias; rode a aplicação para aplicar as migrações ou compile/execute `migrate.c` conforme a organização do projeto.
-- Backup: durante algumas operações de refatoração, arquivos de backup com extensão `.bak` podem existir no repositório de trabalho.
-- Cores: as strings de interface foram colorizadas usando `Utils/Colors.h` (macros ANSI) — isso é puramente estético.
