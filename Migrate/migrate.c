@@ -1,5 +1,6 @@
 #include "migrate.h"
 #include "../Repository/Repository.h"
+#include "../Utils/Colors.h"
 #include <stdio.h>
 
 void run_migrations(void)
@@ -98,10 +99,10 @@ void run_migrations(void)
         ");";
     if (execute_non_query(sql) >= 0)
     {
-        printf("Banco de dados migrado com sucesso!\n");
+        printf("%sBanco de dados migrado com sucesso!%s\n", C_SUCCESS, C_RESET);
     }
     else
     {
-        fprintf(stderr, "Falha ao migrar o banco de dados.\n");
+        fprintf(stderr, "%sFalha ao migrar o banco de dados.%s\n", C_ERROR, C_RESET);
     }
 }

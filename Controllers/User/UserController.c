@@ -1,7 +1,7 @@
 #include "UserController.h"
 #include "../../Repository/Repository.h"
 #include "../Auth/Auth.h"
-#include "../../Utils/Input.h" 
+#include "../../Utils/Input.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -14,9 +14,8 @@ void register_user_flow()
     char email[151];
     char password[101];
 
-    printf("\n--- CADASTRO DE NOVO USUÁRIO ---\n");
+    printf("\n%s--- CADASTRO DE NOVO USUÁRIO ---%s\n", C_TITLE, C_RESET);
 
-    
     int tabela_vazia = 0;
     int row_count = 0;
 
@@ -28,22 +27,19 @@ void register_user_flow()
     if (row_count == 0)
     {
         tabela_vazia = 1;
-        printf("\n-- PRIMEIRO REGISTRO: ADICIONAR USUÁRIO ADMINISTRADOR --\n\n");
+        printf("\n%s-- PRIMEIRO REGISTRO: ADICIONAR USUÁRIO ADMINISTRADOR --%s\n\n", C_WARN, C_RESET);
     }
 
-    
     get_input("Digite o nome de usuário: ", username, sizeof(username));
     get_input("Digite o e-mail: ", email, sizeof(email));
     get_input("Digite a senha: ", password, sizeof(password));
 
-    
     if (strlen(username) == 0 || strlen(email) == 0 || strlen(password) == 0)
     {
-        printf("Todos os campos são obrigatórios!\n");
+        printf("%sTodos os campos são obrigatórios!%s\n", C_WARN, C_RESET);
         return;
     }
 
-    
     char *sql = sqlite3_mprintf(
         "INSERT INTO usuarios (username, email, senha, admin) VALUES ('%q', '%q', '%q', %d);",
         username, email, password,
@@ -58,18 +54,17 @@ void register_user_flow()
     if (execute_non_query(sql) > 0)
     {
         if (tabela_vazia)
-            printf("Administrador '%s' cadastrado com sucesso!\n", username);
+            printf("%sAdministrador '%s' cadastrado com sucesso!%s\n", C_SUCCESS, username, C_RESET);
         else
-            printf("Usuário '%s' cadastrado com sucesso!\n", username);
+            printf("%sUsuário '%s' cadastrado com sucesso!%s\n", C_SUCCESS, username, C_RESET);
     }
     else
     {
-        printf("Erro ao cadastrar usuário. O username ou e-mail pode já existir.\n");
+        printf("%sErro ao cadastrar usuário. O username ou e-mail pode já existir.%s\n", C_ERROR, C_RESET);
     }
 
     sqlite3_free(sql);
 }
-
 
 typedef struct
 {
@@ -85,7 +80,6 @@ int count_rows_callback(void *data, int argc, char **argv, char **colNames)
     (*count)++;
     return 0;
 }
-
 
 static int login_callback(void *data, int argc, char **argv, char **azColName)
 {
@@ -110,7 +104,6 @@ static int login_callback(void *data, int argc, char **argv, char **azColName)
     return 0;
 }
 
-
 static int cart_exists_callback(void *data, int argc, char **argv, char **azColName)
 {
     int *found = (int *)data;
@@ -124,7 +117,7 @@ void login_user_flow()
     char password[101];
     LoginData login_attempt = {0};
 
-    printf("\n--- LOGIN ---\n");
+    printf("\n%s--- LOGIN --- %s\n", C_TITLE, C_RESET);
     get_input("Usuário: ", username, sizeof(username));
     get_input("Senha: ", password, sizeof(password));
 
@@ -141,11 +134,10 @@ void login_user_flow()
 
     if (login_attempt.found)
     {
-        
-        auth_set_usuario_logado(login_attempt.id, login_attempt.username, login_attempt.saldo);
-        printf("Login realizado com sucesso! Bem-vindo, %s!\n", login_attempt.username);
 
-        
+        auth_set_usuario_logado(login_attempt.id, login_attempt.username, login_attempt.saldo);
+        printf("%sLogin realizado com sucesso! Bem-vindo, %s!%s\n", C_SUCCESS, login_attempt.username, C_RESET);
+
         char *ip = "127.0.0.1";
         char *agent = "CLI-App/1.0";
         sql = sqlite3_mprintf("INSERT INTO login_historico (usuario_id, ip, agente_usuario) VALUES (%d, '%q', '%q');", login_attempt.id, ip, agent);
@@ -156,7 +148,6 @@ void login_user_flow()
             sqlite3_free(sql);
         }
 
-        
         int cart_found = 0;
         sql = sqlite3_mprintf("SELECT id FROM carrinhos WHERE usuario_id = %d;", login_attempt.id);
         execute_query(sql, cart_exists_callback, &cart_found);
@@ -167,13 +158,13 @@ void login_user_flow()
             sql = sqlite3_mprintf("INSERT INTO carrinhos (usuario_id) VALUES (%d);", login_attempt.id);
             if (execute_non_query(sql) == 0)
             {
-                printf("Carrinho de compras criado para o usuário.\n");
+                printf("%sCarrinho de compras criado para o usuário.%s\n", C_SUCCESS, C_RESET);
             }
             sqlite3_free(sql);
         }
     }
     else
     {
-        printf("Usuário ou senha inválidos.\n");
+        printf("%sUsuário ou senha inválidos.%s\n", C_ERROR, C_RESET);
     }
 }

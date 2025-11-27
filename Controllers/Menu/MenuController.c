@@ -16,7 +16,6 @@
 #include "../UserAdmin/UserAdminController.h"
 #include <sqlite3.h>
 
-
 static int admin_check_callback(void *data, int argc, char **argv, char **azColName)
 {
     int *is_admin = (int *)data;
@@ -26,7 +25,6 @@ static int admin_check_callback(void *data, int argc, char **argv, char **azColN
     }
     return 0;
 }
-
 
 void show_admin_menu();
 
@@ -46,34 +44,34 @@ void show_main_menu(void)
 {
     int option;
 
-    printf("\n===== PLAY STORE CLI =====\n");
+    printf("\n%s===== SPACE GENIUS =====%s\n", C_TITLE, C_RESET);
 
     if (!auth_is_logged_in())
     {
-        printf("1. Login\n");
-        printf("2. Registrar\n");
-        printf("0. Sair\n");
+        printf("%s1. Login%s\n", C_OPTION, C_RESET);
+        printf("%s2. Registrar%s\n", C_OPTION, C_RESET);
+        printf("%s0. Sair%s\n", C_OPTION, C_RESET);
     }
     else
     {
         UsuarioLogado *user = auth_get_usuario_logado();
-        printf("Bem-vindo, %s! (Saldo: R$%.2f)\n", user->username, user->saldo);
-        printf("--------------------------\n");
-        printf("1. 📁 Perfil\n");
-        printf("2. 🛒 Carrinho\n");
-        printf("3. ❤️ Lista de desejos\n");
-        printf("4. ⭐ Minhas Avaliações\n");
-        printf("5. 🕹 Loja de Jogos\n");
-        printf("6. 💰 Saldo / Transações\n");
-        
+        printf("%sBem-vindo, %s! (Saldo: R$%.2f)%s\n", C_SUCCESS, user->username, user->saldo, C_RESET);
+        printf("%s--------------------------%s\n", C_TITLE, C_RESET);
+        printf("%s1. 📁 Perfil%s\n", C_OPTION, C_RESET);
+        printf("%s2. 🛒 Carrinho%s\n", C_OPTION, C_RESET);
+        printf("%s3. ❤️ Lista de desejos%s\n", C_OPTION, C_RESET);
+        printf("%s4. ⭐ Minhas Avaliações%s\n", C_OPTION, C_RESET);
+        printf("%s5. 🕹 Loja de Jogos%s\n", C_OPTION, C_RESET);
+        printf("%s6. 💰 Saldo / Transações%s\n", C_OPTION, C_RESET);
+
         if (is_user_admin(user->id))
         {
-            printf("7. 🛠️ Menu Admin\n");
+            printf("%s7. 🛠️ Menu Admin%s\n", C_OPTION, C_RESET);
         }
-        printf("0. 🚪 Logout\n");
+        printf("%s0. 🚪 Logout%s\n", C_OPTION, C_RESET);
     }
 
-    printf("==========================\n");
+    printf("%s==========================%s\n", C_TITLE, C_RESET);
 
     option = get_menu_option("Escolha uma opção: ");
 
@@ -88,10 +86,10 @@ void show_main_menu(void)
             register_user_flow();
             break;
         case 0:
-            printf("Saindo...\n");
+            printf("%sSaindo...%s\n", C_INFO, C_RESET);
             exit(0);
         default:
-            printf("Opção inválida! Tente novamente.\n");
+            printf("%sOpção inválida! Tente novamente.%s\n", C_WARN, C_RESET);
             break;
         }
     }
@@ -122,7 +120,7 @@ void show_main_menu(void)
             UsuarioLogado *user = auth_get_usuario_logado();
             if (!is_user_admin(user->id))
             {
-                printf("Opção Inválida.\n");
+                printf("%sOpção Inválida.%s\n", C_WARN, C_RESET);
                 break;
             }
             show_admin_menu();
@@ -133,7 +131,7 @@ void show_main_menu(void)
             break;
 
         default:
-            printf("Opção inválida! Tente novamente.\n");
+            printf("%sOpção inválida! Tente novamente.%s\n", C_WARN, C_RESET);
             break;
         }
     }

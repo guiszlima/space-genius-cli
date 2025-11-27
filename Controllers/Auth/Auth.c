@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-
-
+#include "../../Utils/Colors.h"
 
 static UsuarioLogado *g_usuario_logado = NULL;
 
@@ -17,7 +16,7 @@ static UsuarioLogado *g_usuario_logado = NULL;
  */
 void auth_set_usuario_logado(int id, const char *username, double saldo)
 {
-    
+
     if (g_usuario_logado != NULL)
     {
         free(g_usuario_logado);
@@ -32,7 +31,7 @@ void auth_set_usuario_logado(int id, const char *username, double saldo)
 
     g_usuario_logado->id = id;
     strncpy(g_usuario_logado->username, username, sizeof(g_usuario_logado->username) - 1);
-    g_usuario_logado->username[sizeof(g_usuario_logado->username) - 1] = '\0'; 
+    g_usuario_logado->username[sizeof(g_usuario_logado->username) - 1] = '\0';
     g_usuario_logado->saldo = saldo;
 }
 
@@ -45,7 +44,7 @@ void auth_logout()
     {
         free(g_usuario_logado);
         g_usuario_logado = NULL;
-        printf("Logout realizado com sucesso.\n");
+        printf("%sLogout realizado com sucesso.%s\n", C_SUCCESS, C_RESET);
     }
 }
 
