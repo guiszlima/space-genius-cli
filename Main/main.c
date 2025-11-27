@@ -1,17 +1,32 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include "../Database/Database.h"
 #include "../Migrate/migrate.h"
 #include "../Controllers/MenuController.h"
 
+// Função para limpar recursos antes de sair
+void cleanup()
+{
+    db_close();
+    printf("Conexão com o banco de dados fechada.\n");
+}
+
 int main()
 {
-    // 1. Inicializa o banco de dados (carrega ou cria)
-    migrate();
+    // Registrar a função de limpeza para ser chamada na saída
+    atexit(cleanup);
 
-    // 2. Loop principal da aplicação
+    // 1. Inicializa a conexão com o banco de dados
+    db_connect();
+
+    // 2. Executa as migrações
+    run_migrations();
+
+    // 3. Loop principal da aplicação
     while (1)
     {
         show_main_menu();
     }
 
-    return 0; // Nunca atingido devido ao loop infinito
+    return 0; // Nunca é atingido, mas é uma boa prática
 }

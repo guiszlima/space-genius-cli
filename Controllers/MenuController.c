@@ -1,15 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "MenuController.h"
-// Variável global simulando o estado de login
-int logged_in = 0;
+#include "../User/UserController.h"
+#include "../Auth/Auth.h"
+#include "../Profile/ProfileController.h"
+#include "../Utils/Input.h"
+#include "../Category/CategoryController.h"
+#include "../Game/GameController.h"
+#include "../Cart/CartController.h"
+#include "../Balance/BalanceController.h"
+#include "../Review/ReviewController.h"
+#include "../Wishlist/WishlistController.h"
+#include "../Log/LogController.h"
+#include "../Store/StoreController.h"
+#include "../UserAdmin/UserAdminController.h"
 
-// Protótipos das funções que seriam implementadas
-void login();
-void register_user();
-void inserir_dinheiro();
-void comprar_jogo();
-void reembolso();
+// Protótipos de funções de placeholder para as novas opções
+void show_admin_menu();
 
 void show_main_menu(void)
 {
@@ -17,41 +24,40 @@ void show_main_menu(void)
 
     printf("\n===== PLAY STORE CLI =====\n");
 
-    // Menu dinâmico
-    if (!logged_in)
+    if (!auth_is_logged_in())
     {
         printf("1. Login\n");
-        printf("2. Register\n");
+        printf("2. Registrar\n");
         printf("0. Sair\n");
     }
     else
     {
-        printf("1. Inserir dinheiro\n");
-        printf("2. Comprar jogo\n");
-        printf("3. Reembolso\n");
-        printf("0. Sair\n");
-    }
+        UsuarioLogado *user = auth_get_usuario_logado();
+        printf("Bem-vindo, %s! (Saldo: R$%.2f)\n", user->username, user->saldo);
+        printf("--------------------------\n");
+        printf("1. 📁 Perfil\n");
+        printf("2. 🛒 Carrinho\n");
+        printf("3. ❤️ Lista de desejos\n");
+        printf("4. ⭐ Minhas Avaliações\n");
+        printf("5. 🕹 Loja de Jogos\n");
+        printf("6. 💰 Saldo / Transações\n");
+        printf("8. 🛠️ Menu Admin\n");
+        printf("9. 🚪 Logout\n");
+        }
 
     printf("==========================\n");
-    printf("Escolha uma opção: ");
 
-    if (scanf("%d", &option) != 1)
-    {
-        while (getchar() != '\n')
-            ; // limpa buffer
-        printf("Opção inválida! Tente novamente.\n");
-        return;
-    }
+    option = get_menu_option("Escolha uma opção: ");
 
-    if (!logged_in)
+    if (!auth_is_logged_in())
     {
         switch (option)
         {
         case 1:
-            login();
+            login_user_flow();
             break;
         case 2:
-            register_user();
+            register_user_flow();
             break;
         case 0:
             printf("Saindo...\n");
@@ -66,17 +72,30 @@ void show_main_menu(void)
         switch (option)
         {
         case 1:
-            inserir_dinheiro();
+            show_profile_menu();
             break;
         case 2:
-            comprar_jogo();
+            show_cart_menu();
             break;
         case 3:
-            reembolso();
+            show_wishlist_menu();
             break;
-        case 0:
-            printf("Saindo...\n");
-            exit(0);
+        case 4:
+            show_review_menu();
+            break;
+        case 5:
+            show_store_menu();
+            break;
+        case 6:
+            show_balance_menu();
+            break;
+        case 8:
+            show_admin_menu();
+            break;
+        case 9:
+            auth_logout();
+            break;
+
         default:
             printf("Opção inválida! Tente novamente.\n");
             break;
@@ -84,19 +103,37 @@ void show_main_menu(void)
     }
 }
 
-// Funções simuladas
-void login()
+void show_admin_menu()
 {
-    printf("Login realizado com sucesso!\n");
-    logged_in = 1;
+    int option = -1;
+    while (option != 0)
+    {
+        printf("\n--- MENU ADMINISTRATIVO ---\n");
+        printf("1. Gerenciar Categorias\n");
+        printf("2. Gerenciar Jogos\n");
+        printf("3. Gerenciar Usuários\n");
+        printf("4. Ver Logs Admin\n");
+        printf("0. Voltar\n");
+        printf("---------------------------\n");
+        option = get_menu_option("Escolha uma opção: ");
+        switch (option)
+        {
+        case 1:
+            show_category_menu();
+            break;
+        case 2:
+            show_game_menu();
+            break;
+        case 3:
+            show_user_admin_menu();
+            break;
+        case 4:
+            show_log_menu();
+            break;
+        case 0:
+            break;
+        default:
+            printf("Opção inválida.\n");
+        }
+    }
 }
-
-void register_user()
-{
-    printf("Cadastro realizado com sucesso!\n");
-    logged_in = 1;
-}
-
-void inserir_dinheiro() { printf("Inserir dinheiro\n"); }
-void comprar_jogo() { printf("Comprar jogo\n"); }
-void reembolso() { printf("Reembolso\n"); }

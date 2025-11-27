@@ -1,0 +1,1 @@
+All tasks completed. The C code has been written and structured as requested. I am unable to compile the project in this environment.
