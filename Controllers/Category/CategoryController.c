@@ -1,6 +1,6 @@
 #include "CategoryController.h"
-#include "../Utils/Input.h"
-#include "../Repository/Repository.h"
+#include "../../Utils/Input.h"
+#include "../../Repository/Repository.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -134,7 +134,7 @@ void edit_category()
 
     printf("\n--- EDITAR CATEGORIA ---\n");
     list_categories(); // Mostra as categorias para o usuário saber qual ID editar
-    
+
     printf("Digite o ID da categoria que deseja editar: ");
     char id_buffer[10];
     get_input("", id_buffer, sizeof(id_buffer));
@@ -177,7 +177,7 @@ void delete_category()
 
     printf("\n--- DELETAR CATEGORIA ---\n");
     list_categories();
-    
+
     printf("Digite o ID da categoria que deseja deletar: ");
     char id_buffer[10];
     get_input("", id_buffer, sizeof(id_buffer));

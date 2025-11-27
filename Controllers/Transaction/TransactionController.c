@@ -1,6 +1,6 @@
 #include "TransactionController.h"
 #include "../Auth/Auth.h"
-#include "../Repository/Repository.h"
+#include "../../Repository/Repository.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <sqlite3.h>

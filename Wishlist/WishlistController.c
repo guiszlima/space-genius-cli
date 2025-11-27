@@ -1,7 +1,7 @@
 #include "WishlistController.h"
 #include "../Utils/Input.h"
 #include "../Repository/Repository.h"
-#include "../Auth/Auth.h"
+#include "../Controllers/Auth/Auth.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <sqlite3.h>

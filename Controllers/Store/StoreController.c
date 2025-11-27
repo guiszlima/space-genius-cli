@@ -1,8 +1,8 @@
 #include "StoreController.h"
-#include "../Utils/Input.h"
-#include "../Game/GameController.h" // Para listar jogos
-#include "../Cart/CartController.h" // Para adicionar ao carrinho
-#include "../Wishlist/WishlistController.h" // Para adicionar à lista de desejos
+#include "../../Utils/Input.h"
+#include "../Game/GameController.h"            // Para listar jogos
+#include "../Cart/CartController.h"            // Para adicionar ao carrinho
+#include "../../Wishlist/WishlistController.h" // Para adicionar à lista de desejos
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

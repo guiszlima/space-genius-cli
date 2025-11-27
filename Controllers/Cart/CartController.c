@@ -1,12 +1,12 @@
 #include "CartController.h"
-#include "../Utils/Input.h"
-#include "../Repository/Repository.h"
+#include "../../Utils/Input.h"
+#include "../../Repository/Repository.h"
 #include "../Auth/Auth.h"
 #include "../Transaction/TransactionController.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../Database/Database.h"
+#include "../../Database/Database.h"
 #include <sqlite3.h>
 
 // Protótipos
@@ -195,7 +195,7 @@ void add_to_cart()
     if (execute_non_query(sql) == 0)
     {
         printf("Erro ao adicionar jogo ao carrinho. Verifique se o ID do jogo é válido.\n");
-        }
+    }
     else
     {
         printf("Jogo adicionado/atualizado no carrinho com sucesso!\n");

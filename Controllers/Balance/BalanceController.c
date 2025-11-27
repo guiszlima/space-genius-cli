@@ -1,6 +1,6 @@
 #include "BalanceController.h"
 #include "../Auth/Auth.h"
-#include "../Utils/Input.h"
+#include "../../Utils/Input.h"
 #include "../Transaction/TransactionController.h"
 #include <stdio.h>
 
@@ -48,8 +48,8 @@ void show_balance_menu()
 
 #include "BalanceController.h"
 #include "../Auth/Auth.h"
-#include "../Utils/Input.h"
-#include "../Repository/Repository.h"
+#include "../../Utils/Input.h"
+#include "../../Repository/Repository.h"
 #include "../Transaction/TransactionController.h"
 #include <stdio.h>
 #include <stdlib.h>

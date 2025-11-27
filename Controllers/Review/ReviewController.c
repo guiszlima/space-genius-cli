@@ -1,6 +1,6 @@
 #include "ReviewController.h"
-#include "../Utils/Input.h"
-#include "../Repository/Repository.h"
+#include "../../Utils/Input.h"
+#include "../../Repository/Repository.h"
 #include "../Auth/Auth.h"
 #include <stdio.h>
 #include <stdlib.h>

@@ -1,7 +1,7 @@
 #include "ProfileController.h"
 #include "../Auth/Auth.h"
-#include "../Repository/Repository.h"
-#include "../Utils/Input.h"
+#include "../../Repository/Repository.h"
+#include "../../Utils/Input.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

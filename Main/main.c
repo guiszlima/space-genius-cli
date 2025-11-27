@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "../Database/Database.h"
 #include "../Migrate/migrate.h"
-#include "../Controllers/MenuController.h"
+#include "../Controllers/Menu/MenuController.h"
 
 // Função para limpar recursos antes de sair
 void cleanup()

@@ -1,7 +1,7 @@
 #include "UserController.h"
-#include "../Repository/Repository.h"
+#include "../../Repository/Repository.h"
 #include "../Auth/Auth.h"
-#include "../Utils/Input.h" // Incluindo o novo utilitário de input
+#include "../../Utils/Input.h" // Incluindo o novo utilitário de input
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

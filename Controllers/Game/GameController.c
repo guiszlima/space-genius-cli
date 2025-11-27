@@ -1,6 +1,6 @@
 #include "GameController.h"
-#include "../Utils/Input.h"
-#include "../Repository/Repository.h"
+#include "../../Utils/Input.h"
+#include "../../Repository/Repository.h"
 #include "../Category/CategoryController.h" // Para poder listar as categorias
 #include <stdio.h>
 #include <stdlib.h>
@@ -270,7 +270,7 @@ void edit_game()
     if (execute_non_query(sql) == 0)
     {
         printf("Erro ao atualizar o jogo. Verifique se o novo ID de categoria é válido.\n");
-        }
+    }
     else
     {
         printf("Jogo atualizado com sucesso!\n");
