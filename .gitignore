@@ -1,1 +1,9 @@
-./db.sqlite
+# Ignore the SQLite database file used locally
+# Only the database file should be ignored so other files remain tracked
+db.sqlite
+
+# Optional: ignore common editor/temp files (uncomment if you use them)
+# .DS_Store
+# *.swp
+# *~
+
