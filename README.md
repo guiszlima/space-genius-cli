@@ -92,5 +92,3 @@ No Windows (MSYS2) ou executável gerado:
 ## Notas
 
 - O arquivo de banco local `db.sqlite` está ignorado por `.gitignore`. Não versionar o banco local.
-- Para reexecutar migrações: veja `Migrate/migrate.c`.
-- As cores do terminal são usadas para melhorar a estética; se houver problemas, execute em um terminal compatível (Linux, WSL, MINGW64).
